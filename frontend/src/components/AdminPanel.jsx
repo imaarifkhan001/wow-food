@@ -153,7 +153,7 @@ export default function AdminPanel() {
               </div>
 
               {/* Order Card Grid Content */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '24px', flexWrap: 'wrap' }}>
+              <div className="responsive-grid-admin">
                 
                 {/* 1. Items column */}
                 <div>

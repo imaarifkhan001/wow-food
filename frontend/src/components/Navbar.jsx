@@ -1,5 +1,5 @@
-import React from 'react';
-import { ShoppingCart, LogOut, LogIn, History, UtensilsCrossed, User, Truck, Layers } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShoppingCart, LogOut, LogIn, History, UtensilsCrossed, User, Truck, Layers, Menu, X } from 'lucide-react';
 
 export default function Navbar({ 
   user, 
@@ -10,28 +10,35 @@ export default function Navbar({
   activeTab, 
   setActiveTab 
 }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className="navbar">
       <div className="container nav-container">
         {/* Logo */}
-        <div className="logo-text" onClick={() => setActiveTab('menu')}>
+        <div className="logo-text" onClick={() => handleTabClick('menu')}>
           <UtensilsCrossed size={28} color="#ff7a00" />
           Wow <span>Food</span>
         </div>
 
         {/* Navigation Tabs */}
-        <nav>
+        <nav className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
           <ul className="nav-links">
             <li 
               className={`nav-link ${activeTab === 'menu' ? 'active' : ''}`}
-              onClick={() => setActiveTab('menu')}
+              onClick={() => handleTabClick('menu')}
             >
               Menu
             </li>
             {user && (
               <li 
                 className={`nav-link ${activeTab === 'orders' ? 'active' : ''}`}
-                onClick={() => setActiveTab('orders')}
+                onClick={() => handleTabClick('orders')}
               >
                 <History size={16} />
                 Previous Orders
@@ -40,7 +47,7 @@ export default function Navbar({
             {user && (
               <li 
                 className={`nav-link ${activeTab === 'track' ? 'active' : ''}`}
-                onClick={() => setActiveTab('track')}
+                onClick={() => handleTabClick('track')}
               >
                 <Truck size={16} />
                 Track Order
@@ -48,19 +55,19 @@ export default function Navbar({
             )}
             <li 
               className={`nav-link ${activeTab === 'about' ? 'active' : ''}`}
-              onClick={() => setActiveTab('about')}
+              onClick={() => handleTabClick('about')}
             >
               About Us
             </li>
             <li 
               className={`nav-link ${activeTab === 'contact' ? 'active' : ''}`}
-              onClick={() => setActiveTab('contact')}
+              onClick={() => handleTabClick('contact')}
             >
               Contact Us
             </li>
             <li 
-              className={`nav-link ${activeTab === 'admin' ? 'active' : ''}`}
-              onClick={() => setActiveTab('admin')}
+              className={`nav-link admin-link ${activeTab === 'admin' ? 'active' : ''}`}
+              onClick={() => handleTabClick('admin')}
               style={{ borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '16px', color: '#ffbe1a' }}
             >
               <Layers size={16} />
@@ -81,26 +88,34 @@ export default function Navbar({
 
           {/* User Section */}
           {user ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#f3f4f6', fontSize: '14px', fontWeight: '500' }}>
+            <div className="user-profile-section">
+              <div className="user-welcome">
                 <User size={16} color="#ffbe1a" />
                 <span>Hi, {user.name}</span>
               </div>
               <button 
-                className="btn btn-secondary" 
+                className="btn btn-secondary logout-btn" 
                 onClick={onLogout}
-                style={{ padding: '6px 12px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px' }}
               >
                 <LogOut size={14} />
                 Logout
               </button>
             </div>
           ) : (
-            <button className="btn btn-primary" onClick={onOpenAuth}>
+            <button className="btn btn-primary login-btn" onClick={onOpenAuth}>
               <LogIn size={16} />
-              Login / Sign Up
+              Login
             </button>
           )}
+
+          {/* Hamburger Menu Icon */}
+          <button 
+            className="mobile-menu-btn" 
+            onClick={() => setIsMenuOpen(!isMenuOpen)} 
+            aria-label="Toggle Menu"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </div>
     </header>

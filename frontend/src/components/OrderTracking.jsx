@@ -134,7 +134,7 @@ export default function OrderTracking({ token }) {
           <p style={{ fontWeight: '600' }}>Error: {error}</p>
         </div>
       ) : orders.length > 0 ? (
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px', flexWrap: 'wrap' }}>
+        <div className="responsive-grid-tracking">
           {/* Timeline and Live Map Mock */}
           <div className="glass-panel" style={{ padding: '32px', border: '1px solid var(--glass-border)' }}>
             

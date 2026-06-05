@@ -35,12 +35,12 @@ export default function ContactUs({ onAddToast }) {
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px', flexWrap: 'wrap' }}>
+      <div className="responsive-grid-contact">
         {/* Contact Form */}
         <div className="glass-panel" style={{ padding: '32px', border: '1px solid var(--glass-border)' }}>
           <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '24px' }}>Send Us a Message</h3>
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="responsive-grid-contact-form">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label style={{ fontSize: '12px', fontWeight: '600', color: 'var(--text-secondary)' }}>Your Name</label>
                 <input

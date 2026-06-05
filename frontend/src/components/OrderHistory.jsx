@@ -94,7 +94,7 @@ export default function OrderHistory({ token }) {
               </div>
 
               {/* Order Content Info */}
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px', flexWrap: 'wrap' }}>
+              <div className="responsive-grid-history">
                 {/* Ordered Items list */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   <h4 style={{ fontSize: '14px', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Items Ordered</h4>

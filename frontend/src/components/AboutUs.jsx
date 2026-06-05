@@ -16,7 +16,7 @@ export default function AboutUs() {
 
       {/* Story Section */}
       <div className="glass-panel" style={{ padding: '40px', marginBottom: '48px', border: '1px solid var(--glass-border)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div className="responsive-grid-about">
           <div>
             <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '24px', fontWeight: '700', color: 'var(--primary)', marginBottom: '16px' }}>
               Our Culinary Journey
