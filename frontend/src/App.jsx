@@ -10,6 +10,7 @@ import ContactUs from './components/ContactUs';
 import OrderTracking from './components/OrderTracking';
 import AdminPanel from './components/AdminPanel';
 import { ShoppingBag, ChevronRight, Award, Truck, ShieldCheck, CheckCircle, AlertTriangle } from 'lucide-react';
+import { getFoods, placeOrder, isMockMode } from './api';
 
 export default function App() {
   // Authentication State
@@ -29,6 +30,7 @@ export default function App() {
   const [foods, setFoods] = useState([]);
   const [loadingFoods, setLoadingFoods] = useState(true);
   const [orderSubmitting, setOrderSubmitting] = useState(false);
+  const [demoMode, setDemoMode] = useState(false);
 
   // Toast System State
   const [toasts, setToasts] = useState([]);
@@ -57,12 +59,9 @@ export default function App() {
   useEffect(() => {
     const fetchFoods = async () => {
       try {
-        const response = await fetch('http://localhost:8081/api/foods');
-        if (!response.ok) {
-          throw new Error('Failed to connect to backend.');
-        }
-        const data = await response.json();
+        const data = await getFoods();
         setFoods(data);
+        setDemoMode(isMockMode());
       } catch (err) {
         console.error('Error fetching food data:', err);
         addToast('Unable to connect to the backend server. Make sure it is running!', 'error');
@@ -153,24 +152,11 @@ export default function App() {
     }));
 
     try {
-      const response = await fetch('http://localhost:8081/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          address,
-          phone,
-          items: orderItemsPayload
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to place order.');
-      }
+      await placeOrder({
+        address,
+        phone,
+        items: orderItemsPayload
+      }, token);
 
       // Success order placement
       addToast('Delicious choice! Your order has been placed successfully.');
@@ -199,6 +185,26 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
+
+      {demoMode && (
+        <div style={{ 
+          background: 'rgba(255, 122, 0, 0.08)', 
+          borderBottom: '1px solid rgba(255, 122, 0, 0.15)', 
+          padding: '10px 16px', 
+          textAlign: 'center', 
+          fontSize: '13px', 
+          color: 'var(--primary)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '8px',
+          backdropFilter: 'blur(8px)',
+          fontFamily: 'inherit'
+        }}>
+          <span>🍽️</span>
+          <span><strong>Vercel Demo Mode:</strong> Backend is offline. Your orders, signups, and status updates will run locally in your browser!</span>
+        </div>
+      )}
 
       {/* Main Pages Content */}
       <main style={{ flex: 1 }}>

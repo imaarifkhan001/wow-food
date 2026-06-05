@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, MapPin, Phone, ShoppingBag, History } from 'lucide-react';
+import { getMyOrders } from '../api';
 
 export default function OrderHistory({ token }) {
   const [orders, setOrders] = useState([]);
@@ -11,17 +12,7 @@ export default function OrderHistory({ token }) {
       setLoading(true);
       setError('');
       try {
-        const response = await fetch('http://localhost:8081/api/orders/my-orders', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch your order history.');
-        }
-
-        const data = await response.json();
+        const data = await getMyOrders(token);
         setOrders(data);
       } catch (err) {
         setError(err.message);

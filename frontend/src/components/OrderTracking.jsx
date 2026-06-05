@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, MapPin, Truck, CheckCircle2, ChefHat, Sparkles, AlertCircle, ShoppingBag, Eye } from 'lucide-react';
+import { getMyOrders } from '../api';
 
 export default function OrderTracking({ token }) {
   const [orders, setOrders] = useState([]);
@@ -16,12 +17,7 @@ export default function OrderTracking({ token }) {
     let intervalId;
     if (token) {
       intervalId = setInterval(() => {
-        fetch('http://localhost:8081/api/orders/my-orders', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        })
-        .then(res => res.ok ? res.json() : null)
+        getMyOrders(token)
         .then(data => {
           if (data && data.length > 0) {
             setOrders(data);
@@ -43,17 +39,7 @@ export default function OrderTracking({ token }) {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('http://localhost:8081/api/orders/my-orders', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to load orders.');
-      }
-
-      const data = await response.json();
+      const data = await getMyOrders(token);
       setOrders(data);
       if (data.length > 0) {
         setSelectedOrder(data[0]); // default to latest order

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Mail, Lock, User, UserPlus, LogIn } from 'lucide-react';
+import { login, signup } from '../api';
 
 export default function AuthModal({ 
   isOpen, 
@@ -40,21 +41,11 @@ export default function AuthModal({
     setLoading(true);
 
     try {
-      const endpoint = isLoginMode ? '/api/auth/login' : '/api/auth/signup';
-      const payload = isLoginMode 
-        ? { email: email.trim(), password } 
-        : { name: name.trim(), email: email.trim(), password };
-
-      const response = await fetch(`http://localhost:8081${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Authentication failed. Please try again.');
+      let data;
+      if (isLoginMode) {
+        data = await login(email.trim(), password);
+      } else {
+        data = await signup(name.trim(), email.trim(), password);
       }
 
       // Success

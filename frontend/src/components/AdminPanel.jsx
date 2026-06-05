@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ShoppingBag, Clock, MapPin, Phone, RefreshCw, Layers, CheckCircle2, ChevronRight, User } from 'lucide-react';
+import { getAllOrders, updateOrderStatus } from '../api';
 
 export default function AdminPanel() {
   const [orders, setOrders] = useState([]);
@@ -12,11 +13,7 @@ export default function AdminPanel() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('http://localhost:8081/api/orders/all');
-      if (!response.ok) {
-        throw new Error('Failed to retrieve system orders.');
-      }
-      const data = await response.json();
+      const data = await getAllOrders();
       // Sort: newest orders first
       const sorted = data.sort((a, b) => b.id - a.id);
       setOrders(sorted);
@@ -34,17 +31,7 @@ export default function AdminPanel() {
   const updateStatus = async (orderId, newStatus) => {
     setUpdatingId(orderId);
     try {
-      const response = await fetch(`http://localhost:8081/api/orders/${orderId}/status`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ status: newStatus })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update order status.');
-      }
+      await updateOrderStatus(orderId, newStatus);
 
       // Update state locally
       setOrders(prev => prev.map(order => 
